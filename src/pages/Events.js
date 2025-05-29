@@ -40,6 +40,20 @@ const FilterTabs = styled.div`
   margin-bottom: 3rem;
   gap: 1rem;
   flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 0.8rem;
+  }
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+  }
 `;
 
 const FilterTab = styled(motion.button)`
@@ -56,6 +70,18 @@ const FilterTab = styled(motion.button)`
     background: ${props => props.theme.primary};
     color: white;
     transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 480px) {
+    width: 200px;
+    max-width: 90%;
+    text-align: center;
+    padding: 0.8rem 1rem;
   }
 `;
 
@@ -786,4 +812,4 @@ const Events = () => {
   );
 };
 
-export default Events; 
+export default Events;

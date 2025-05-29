@@ -323,6 +323,17 @@ const FooterLogo = styled(Link)`
   }
 `;
 
+const LegalLinks = styled.div`
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    width: 100%;
+  }
+`;
+
 // Contact Info Icon Components
 const LocationIcon = () => (
   <svg viewBox="0 0 24 24">
@@ -513,7 +524,7 @@ const Footer = () => {
 
         <FooterBottom>
           <FooterLogo to="/">Aristo</FooterLogo>
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+          <LegalLinks>
             {legalLinks.map((link, index) => (
               <ExternalLink 
                 key={index} 
@@ -523,7 +534,7 @@ const Footer = () => {
                 {link.label}
               </ExternalLink>
             ))}
-          </div>
+          </LegalLinks>
           <Copyright>
             © {new Date().getFullYear()} Aristo Bar. All rights reserved.
           </Copyright>

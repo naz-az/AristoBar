@@ -42,7 +42,13 @@ const TabNavigation = styled.div`
   // overflow-x: auto;
   flex-wrap: wrap;
   @media (max-width: 768px) {
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0.5rem;
+    justify-items: center;
+    max-width: 400px;
+    margin: 0 auto 3rem auto;
   }
 `;
 

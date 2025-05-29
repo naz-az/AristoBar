@@ -390,7 +390,7 @@ const TestimonialsSection = styled.section`
   overflow: hidden;
   
   &::before {
-    content: '';
+    content: '“';
     position: absolute;
     top: 0;
     left: 0;
@@ -417,6 +417,10 @@ const CarouselWrapper = styled.div`
   overflow: hidden;
   box-shadow: 0 20px 60px ${props => props.theme.shadow};
   border: 1px solid ${props => props.theme.primary}22;
+  
+  @media (max-width: 768px) {
+    padding-bottom: 4rem;
+  }
 `;
 
 const TestimonialsCarousel = styled.div`
@@ -440,14 +444,19 @@ const TestimonialSlide = styled(motion.div)`
   @media (max-width: 968px) {
     flex-direction: column;
     text-align: center;
-    padding: 3rem 2rem;
+    padding: 2rem 1.5rem;
     gap: 2rem;
+    align-items: center;
   }
 `;
 
 const TestimonialContent = styled.div`
   flex: 1;
   position: relative;
+  
+  @media (max-width: 968px) {
+    order: 2;
+  }
   
   &::before {
     content: '“';
@@ -462,8 +471,9 @@ const TestimonialContent = styled.div`
     
     @media (max-width: 968px) {
       top: -25px;
-      left: 2%;
+      left: 50%;
       transform: translateX(-50%);
+      font-size: 4rem;
     }
   }
 `;
@@ -477,6 +487,13 @@ const TestimonialText = styled.p`
   position: relative;
   z-index: 2;
   margin-left: 20px;
+  
+  @media (max-width: 968px) {
+    margin-left: 0;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+  }
 `;
 
 const TestimonialMeta = styled.div`
@@ -486,6 +503,9 @@ const TestimonialMeta = styled.div`
   
   @media (max-width: 968px) {
     justify-content: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
   }
 `;
 
@@ -497,10 +517,20 @@ const AuthorAvatar = styled.div`
   border: 3px solid ${props => props.theme.primary};
   box-shadow: 0 8px 25px ${props => props.theme.primary}33;
   flex-shrink: 0;
+  
+  @media (max-width: 968px) {
+    width: 80px;
+    height: 80px;
+  }
 `;
 
 const AuthorInfo = styled.div`
   flex: 1;
+  
+  @media (max-width: 968px) {
+    text-align: center;
+    flex: none;
+  }
 `;
 
 const AuthorName = styled.h4`
@@ -508,17 +538,32 @@ const AuthorName = styled.h4`
   font-weight: 700;
   margin-bottom: 0.3rem;
   font-size: 1.1rem;
+  
+  @media (max-width: 968px) {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const AuthorRole = styled.p`
   color: ${props => props.theme.textSecondary};
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
+  
+  @media (max-width: 968px) {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+  }
 `;
 
 const StarRating = styled.div`
   display: flex;
   gap: 0.2rem;
+  
+  @media (max-width: 968px) {
+    justify-content: center;
+    gap: 0.3rem;
+  }
 `;
 
 const Star = styled.span`
@@ -539,7 +584,7 @@ const TestimonialVisual = styled.div`
   overflow: hidden;
   
   &::before {
-    content: '';
+    content: '“';
     position: absolute;
     top: 0;
     left: 0;
@@ -550,6 +595,12 @@ const TestimonialVisual = styled.div`
   }
   
   @media (max-width: 968px) {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 480px) {
     width: 200px;
     height: 200px;
   }
@@ -564,6 +615,10 @@ const CarouselControls = styled.div`
   gap: 1rem;
   align-items: center;
   z-index: 10;
+  
+  @media (max-width: 768px) {
+    bottom: 1.5rem;
+  }
 `;
 
 const CarouselDots = styled.div`
@@ -1356,7 +1411,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Featured Cocktails
+            Featured Beverages
           </SectionTitle>
           
           <CocktailsGrid>
