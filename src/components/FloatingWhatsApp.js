@@ -155,7 +155,7 @@ const FloatingWhatsApp = () => {
     const phoneNumber = '60321100973'; // +60 3-2110 0973 converted to WhatsApp format
     
     const message = encodeURIComponent(
-      "Hello Aristo Bar! 🍸\n\nI would like to make a reservation for your establishment. Could you please assist me with the booking details and availability?\n\nThank you!"
+      "Hello Aristo Bar! \n\nI would like to make a reservation for your establishment. Could you please assist me with the booking details and availability?\n\nThank you!"
     );
     
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;

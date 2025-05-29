@@ -42,6 +42,11 @@ const FooterSection = styled(motion.div)`
   flex-direction: column;
   width: 100%;
   min-width: 0;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    align-items: center;
+  }
 `;
 
 const FooterTitle = styled.h3`
@@ -66,33 +71,76 @@ const FooterText = styled.p`
   color: ${props => props.theme.textSecondary};
   line-height: 1.6;
   margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const FooterLink = styled(Link)`
   color: ${props => props.theme.textSecondary};
   text-decoration: none;
-  padding: 0.5rem 0;
-  transition: all 0.3s ease;
+  padding: 0.75rem 1.5rem;
+  margin: 0.25rem 0;
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   display: inline-block;
-
-  &:hover {
-    color: ${props => props.theme.primary};
-    transform: translateX(5px);
-  }
+  background: transparent;
+  border: 1px solid transparent;
+  overflow: hidden;
 
   &::before {
-    content: '→';
+    content: '';
     position: absolute;
-    left: -20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${props => props.theme.gradient};
     opacity: 0;
-    transition: all 0.3s ease;
-    color: ${props => props.theme.primary};
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
+    transform: scale(0.8);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${props => props.theme.gradient};
+    opacity: 0;
+    filter: blur(15px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
+    transform: scale(1.2);
+  }
+
+  &:hover {
+    color: white;
+    transform: translateY(-2px);
+    border-color: ${props => props.theme.primary}44;
+    box-shadow: 0 8px 25px ${props => props.theme.shadow};
   }
 
   &:hover::before {
-    opacity: 1;
-    left: -15px;
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  &:hover::after {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  span {
+    position: relative;
+    z-index: 3;
+    font-weight: 500;
+    letter-spacing: 0.5px;
   }
 `;
 
@@ -129,6 +177,10 @@ const SocialLinks = styled.div`
   gap: 1rem;
   margin-top: 1rem;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 const SocialLink = styled(motion.a)`
@@ -157,6 +209,7 @@ const SocialLink = styled(motion.a)`
     background: ${props => props.platform === 'facebook' ? '#1877f2' : 
                 props.platform === 'instagram' ? 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)' :
                 props.platform === 'twitter' ? '#1da1f2' :
+                props.platform === 'x' ? '#000000' : 
                 props.platform === 'youtube' ? '#ff0000' :
                 props.platform === 'tiktok' ? '#000000' :
                 props.theme.gradient};
@@ -173,6 +226,7 @@ const SocialLink = styled(motion.a)`
   }
 
   &:hover::before {
+    opacity: 0.7;
     transform: scale(1);
   }
 
@@ -189,6 +243,10 @@ const ContactInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    align-items: center;
+  }
 `;
 
 const ContactItem = styled(motion.div)`
@@ -196,6 +254,12 @@ const ContactItem = styled(motion.div)`
   align-items: center;
   gap: 1rem;
   padding: 0.5rem 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
 `;
 
 const ContactIcon = styled.div`
@@ -220,6 +284,10 @@ const ContactIcon = styled.div`
 const ContactText = styled.div`
   color: ${props => props.theme.textSecondary};
   line-height: 1.4;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const FooterBottom = styled.div`
@@ -299,6 +367,13 @@ const TwitterIcon = () => (
   </svg>
 );
 
+const XIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    {/* A simplified X logo path. You can replace this with a more accurate one if needed. */}
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+
 const YouTubeIcon = () => (
   <svg viewBox="0 0 24 24">
     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -315,7 +390,8 @@ const Footer = () => {
   const socialLinks = [
     { icon: FacebookIcon, url: 'https://facebook.com/aristobar', label: 'Facebook', platform: 'facebook' },
     { icon: InstagramIcon, url: 'https://instagram.com/aristobar', label: 'Instagram', platform: 'instagram' },
-    { icon: TwitterIcon, url: 'https://twitter.com/aristobar', label: 'Twitter', platform: 'twitter' },
+    // { icon: TwitterIcon, url: 'https://twitter.com/aristobar', label: 'Twitter', platform: 'twitter' },
+    { icon: XIcon, url: 'https://x.com/aristobar', label: 'X', platform: 'x' }, 
     { icon: YouTubeIcon, url: 'https://youtube.com/aristobar', label: 'YouTube', platform: 'youtube' },
     { icon: TikTokIcon, url: 'https://tiktok.com/@aristobar', label: 'TikTok', platform: 'tiktok' }
   ];
@@ -400,7 +476,7 @@ const Footer = () => {
             <FooterTitle>Quick Links</FooterTitle>
             {quickLinks.map((link, index) => (
               <FooterLink key={index} to={link.to}>
-                {link.label}
+                <span>{link.label}</span>
               </FooterLink>
             ))}
           </FooterSection>

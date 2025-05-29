@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import About from './pages/About';
@@ -151,6 +152,7 @@ function App() {
       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
         <GlobalStyle />
         <Router>
+          <ScrollToTop />
           <AppContainer>
             <Navbar />
             <MainContent>

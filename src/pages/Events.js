@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -215,8 +215,269 @@ const FeaturedBadge = styled.div`
   z-index: 2;
 `;
 
+// Modal Components
+const ModalOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+`;
+
+const ModalContent = styled(motion.div)`
+  background: ${props => props.theme.surface};
+  border-radius: 20px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid ${props => props.theme.primary}33;
+  position: relative;
+`;
+
+const CloseButton = styled(motion.button)`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: ${props => props.theme.background};
+  border: 2px solid ${props => props.theme.primary}33;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: ${props => props.theme.text};
+  font-size: 1.2rem;
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${props => props.theme.primary};
+    color: white;
+    transform: rotate(90deg);
+  }
+`;
+
+const ModalImage = styled(motion.div)`
+  width: 100%;
+  height: 350px;
+  background-image: url(${props => props.imageUrl});
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      ${props => props.theme.surface}cc
+    );
+  }
+`;
+
+const ModalBody = styled.div`
+  padding: 2rem;
+  padding-top: 1rem;
+`;
+
+const ModalHeader = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const ModalDateSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+`;
+
+const ModalDateBox = styled.div`
+  background: ${props => props.theme.gradient};
+  color: white;
+  padding: 1rem;
+  border-radius: 15px;
+  text-align: center;
+  min-width: 80px;
+`;
+
+const ModalDateDay = styled.div`
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+`;
+
+const ModalDateMonth = styled.div`
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 0.2rem;
+`;
+
+const ModalTimeInfo = styled.div`
+  flex: 1;
+`;
+
+const ModalTime = styled.div`
+  color: ${props => props.theme.textSecondary};
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+`;
+
+const ModalPrice = styled.div`
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: ${props => props.theme.primary};
+`;
+
+const ModalTitle = styled.h2`
+  font-size: 2.2rem;
+  color: ${props => props.theme.text};
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+`;
+
+const ModalDescription = styled.p`
+  color: ${props => props.theme.textSecondary};
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+`;
+
+const TagsSection = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const TagsTitle = styled.h3`
+  color: ${props => props.theme.text};
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+`;
+
+const ModalTags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+`;
+
+const ModalTag = styled(motion.div)`
+  background: ${props => props.theme.primary}22;
+  color: ${props => props.theme.primary};
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid ${props => props.theme.primary}33;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: ${props => props.theme.primary}33;
+    transform: translateY(-2px);
+  }
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+`;
+
+const ActionButton = styled(motion.button)`
+  flex: 1;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.primary {
+    background: ${props => props.theme.gradient};
+    color: white;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px ${props => props.theme.primary}44;
+    }
+  }
+
+  &.secondary {
+    background: ${props => props.theme.background};
+    color: ${props => props.theme.text};
+    border: 2px solid ${props => props.theme.primary}33;
+    
+    &:hover {
+      background: ${props => props.theme.primary}11;
+      border-color: ${props => props.theme.primary}66;
+    }
+  }
+`;
+
+const EventIcon = styled.div`
+  font-size: 2rem;
+  margin-left: 1rem;
+`;
+
 const Events = () => {
   const [activeFilter, setActiveFilter] = useState('all');
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // Close modal when pressing Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedEvent(null);
+      }
+    };
+
+    if (selectedEvent) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedEvent]);
+
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedEvent(null);
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleCloseModal();
+    }
+  };
 
   const filters = [
     { id: 'all', label: 'All Events' },
@@ -374,7 +635,10 @@ const Events = () => {
                 key={event.id}
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 layout
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleEventClick(event)}
               >
                 {event.featured && <FeaturedBadge>Featured</FeaturedBadge>}
                 
@@ -403,6 +667,10 @@ const Events = () => {
                     <BookButton
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Handle booking logic here
+                      }}
                     >
                       {event.price === 'Contact' ? 'Inquire' : 'Book Now'}
                     </BookButton>
@@ -411,6 +679,107 @@ const Events = () => {
               </EventCard>
             ))}
           </EventsGrid>
+        </AnimatePresence>
+
+        {/* Modal */}
+        <AnimatePresence>
+          {selectedEvent && (
+            <ModalOverlay
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={handleOverlayClick}
+            >
+              <ModalContent
+                initial={{ scale: 0.8, opacity: 0, y: 50 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.8, opacity: 0, y: 50 }}
+                transition={{ 
+                  type: "spring",
+                  damping: 25,
+                  stiffness: 300
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <CloseButton
+                  onClick={handleCloseModal}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  ×
+                </CloseButton>
+                
+                {selectedEvent.featured && (
+                  <FeaturedBadge style={{ top: '1rem', left: '1rem', right: 'auto' }}>
+                    Featured
+                  </FeaturedBadge>
+                )}
+                
+                <ModalImage
+                  imageUrl={selectedEvent.image}
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                />
+                
+                <ModalBody>
+                  <ModalHeader>
+                    <ModalDateSection>
+                      <ModalDateBox>
+                        <ModalDateDay>{selectedEvent.date.day}</ModalDateDay>
+                        <ModalDateMonth>{selectedEvent.date.month}</ModalDateMonth>
+                      </ModalDateBox>
+                      <ModalTimeInfo>
+                        <ModalTime>{selectedEvent.time}</ModalTime>
+                        <ModalPrice>{selectedEvent.price}</ModalPrice>
+                      </ModalTimeInfo>
+                      <EventIcon>{selectedEvent.icon}</EventIcon>
+                    </ModalDateSection>
+                    
+                    <ModalTitle>{selectedEvent.title}</ModalTitle>
+                  </ModalHeader>
+                  
+                  <ModalDescription>{selectedEvent.description}</ModalDescription>
+                  
+                  <TagsSection>
+                    <TagsTitle>Event Details</TagsTitle>
+                    <ModalTags>
+                      {selectedEvent.tags.map((tag, idx) => (
+                        <ModalTag
+                          key={idx}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          {tag}
+                        </ModalTag>
+                      ))}
+                    </ModalTags>
+                  </TagsSection>
+                  
+                  <ActionButtons>
+                    <ActionButton
+                      className="primary"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {selectedEvent.price === 'Contact' ? 'Inquire Now' : 'Book Event'}
+                    </ActionButton>
+                    <ActionButton
+                      className="secondary"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleCloseModal}
+                    >
+                      Close
+                    </ActionButton>
+                  </ActionButtons>
+                </ModalBody>
+              </ModalContent>
+            </ModalOverlay>
+          )}
         </AnimatePresence>
       </EventsContent>
     </EventsContainer>

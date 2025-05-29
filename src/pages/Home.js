@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { motion, useInView, useAnimation } from 'framer-motion';
+import { motion, useInView, useAnimation, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 
 const HomeContainer = styled.div`
@@ -263,19 +263,8 @@ const ViewMoreLink = styled(motion.div)`
     transition: left 0.6s ease;
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 1rem;
-    width: 0;
-    height: 0;
-    border-left: 6px solid white;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid transparent;
-    transform: translateY(-50%) translateX(0);
-    transition: transform 0.3s ease;
-  }
+  /* The &::after block has been removed */
+  /* The &:hover::after block has been removed */
 
   &:hover {
     transform: translateY(-2px) scale(1.02);
@@ -285,10 +274,6 @@ const ViewMoreLink = styled(motion.div)`
 
   &:hover::before {
     left: 100%;
-  }
-
-  &:hover::after {
-    transform: translateY(-50%) translateX(4px);
   }
 
   &:active {
@@ -465,10 +450,10 @@ const TestimonialContent = styled.div`
   position: relative;
   
   &::before {
-    content: '"';
+    content: '“';
     position: absolute;
-    top: -20px;
-    left: -20px;
+    top: -22px;
+    left: -22px;
     font-size: 6rem;
     color: ${props => props.theme.primary};
     font-family: 'Playfair Display', serif;
@@ -476,8 +461,8 @@ const TestimonialContent = styled.div`
     opacity: 0.3;
     
     @media (max-width: 968px) {
-      top: -30px;
-      left: 50%;
+      top: -25px;
+      left: 2%;
       transform: translateX(-50%);
     }
   }
@@ -491,6 +476,7 @@ const TestimonialText = styled.p`
   font-style: italic;
   position: relative;
   z-index: 2;
+  margin-left: 20px;
 `;
 
 const TestimonialMeta = styled.div`
@@ -797,12 +783,233 @@ const ScrollArrow = styled(motion.div)`
   }
 `;
 
+// Modal Components for Cocktails
+const CocktailModalOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+`;
+
+const CocktailModalContent = styled(motion.div)`
+  background: ${props => props.theme.surface};
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid ${props => props.theme.primary}33;
+  position: relative;
+`;
+
+const CocktailModalCloseButton = styled(motion.button)`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: ${props => props.theme.background};
+  border: 2px solid ${props => props.theme.primary}33;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: ${props => props.theme.text};
+  font-size: 1.2rem;
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${props => props.theme.primary};
+    color: white;
+    transform: rotate(90deg);
+  }
+`;
+
+const CocktailModalImage = styled(motion.div)`
+  width: 100%;
+  height: 300px;
+  background-image: url(${props => props.imageUrl});
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      ${props => props.theme.surface}cc
+    );
+  }
+`;
+
+const CocktailModalPrice = styled.div`
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: ${props => props.theme.gradient};
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  z-index: 2;
+  box-shadow: 0 8px 25px ${props => props.theme.primary}44;
+`;
+
+const CocktailModalBody = styled.div`
+  padding: 2rem;
+  padding-top: 1rem;
+`;
+
+const CocktailModalHeader = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const CocktailModalTitle = styled.h2`
+  font-size: 2.2rem;
+  color: ${props => props.theme.text};
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  font-family: 'Playfair Display', serif;
+`;
+
+const CocktailModalDescription = styled.p`
+  color: ${props => props.theme.textSecondary};
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+`;
+
+const IngredientsSection = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const IngredientsTitle = styled.h3`
+  color: ${props => props.theme.text};
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+`;
+
+const CocktailModalIngredients = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.8rem;
+`;
+
+const CocktailModalIngredient = styled(motion.div)`
+  background: ${props => props.theme.primary}22;
+  color: ${props => props.theme.primary};
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid ${props => props.theme.primary}33;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+
+  &:hover {
+    background: ${props => props.theme.primary}33;
+    transform: translateY(-2px);
+  }
+`;
+
+const CocktailActionButtons = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+`;
+
+const CocktailActionButton = styled(motion.button)`
+  flex: 1;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.primary {
+    background: ${props => props.theme.gradient};
+    color: white;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px ${props => props.theme.primary}44;
+    }
+  }
+
+  &.secondary {
+    background: ${props => props.theme.background};
+    color: ${props => props.theme.text};
+    border: 2px solid ${props => props.theme.primary}33;
+    
+    &:hover {
+      background: ${props => props.theme.primary}11;
+      border-color: ${props => props.theme.primary}66;
+    }
+  }
+`;
+
+const CocktailInfo = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: ${props => props.theme.background};
+  border-radius: 15px;
+  border: 1px solid ${props => props.theme.primary}22;
+`;
+
+const InfoItem = styled.div`
+  text-align: center;
+`;
+
+const InfoLabel = styled.div`
+  color: ${props => props.theme.textSecondary};
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+`;
+
+const InfoValue = styled.div`
+  color: ${props => props.theme.text};
+  font-size: 1.1rem;
+  font-weight: 600;
+`;
+
 const Home = () => {
   const controls = useAnimation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [selectedCocktail, setSelectedCocktail] = useState(null);
   const intervalRef = useRef(null);
   const navigate = useNavigate();
 
@@ -824,6 +1031,27 @@ const Home = () => {
 
     return () => clearInterval(intervalRef.current);
   }, [isPlaying]);
+
+  // Close modal when pressing Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedCocktail(null);
+      }
+    };
+
+    if (selectedCocktail) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedCocktail]);
 
   const handleDotClick = (index) => {
     setActiveTestimonial(index);
@@ -849,6 +1077,20 @@ const Home = () => {
 
   const handleMouseLeave = () => {
     setIsPlaying(true);
+  };
+
+  const handleCocktailClick = (cocktail) => {
+    setSelectedCocktail(cocktail);
+  };
+
+  const handleCloseCocktailModal = () => {
+    setSelectedCocktail(null);
+  };
+
+  const handleCocktailOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleCloseCocktailModal();
+    }
   };
 
   // Gallery items with real Unsplash images
@@ -1125,6 +1367,9 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleCocktailClick(cocktail)}
               >
                 <CocktailImage image={cocktail.image}>
                   <CocktailPrice>{cocktail.price}</CocktailPrice>
@@ -1176,6 +1421,103 @@ const Home = () => {
             </ViewMoreLink>
           </motion.div>
         </CocktailsContainer>
+
+        {/* Cocktail Modal */}
+        <AnimatePresence>
+          {selectedCocktail && (
+            <CocktailModalOverlay
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={handleCocktailOverlayClick}
+            >
+              <CocktailModalContent
+                initial={{ scale: 0.8, opacity: 0, y: 50 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.8, opacity: 0, y: 50 }}
+                transition={{ 
+                  type: "spring",
+                  damping: 25,
+                  stiffness: 300
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <CocktailModalCloseButton
+                  onClick={handleCloseCocktailModal}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  ×
+                </CocktailModalCloseButton>
+                
+                <CocktailModalImage
+                  imageUrl={selectedCocktail.image}
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <CocktailModalPrice>{selectedCocktail.price}</CocktailModalPrice>
+                </CocktailModalImage>
+                
+                <CocktailModalBody>
+                  <CocktailModalHeader>
+                    <CocktailModalTitle>{selectedCocktail.name}</CocktailModalTitle>
+                  </CocktailModalHeader>
+                  
+                  <CocktailModalDescription>{selectedCocktail.description}</CocktailModalDescription>
+                  
+                  <CocktailInfo>
+                    <InfoItem>
+                      <InfoLabel>Price</InfoLabel>
+                      <InfoValue>{selectedCocktail.price}</InfoValue>
+                    </InfoItem>
+                    <InfoItem>
+                      <InfoLabel>Category</InfoLabel>
+                      <InfoValue>Premium Cocktail</InfoValue>
+                    </InfoItem>
+                  </CocktailInfo>
+                  
+                  <IngredientsSection>
+                    <IngredientsTitle>Premium Ingredients</IngredientsTitle>
+                    <CocktailModalIngredients>
+                      {selectedCocktail.ingredients.map((ingredient, idx) => (
+                        <CocktailModalIngredient
+                          key={idx}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          {ingredient}
+                        </CocktailModalIngredient>
+                      ))}
+                    </CocktailModalIngredients>
+                  </IngredientsSection>
+                  
+                  <CocktailActionButtons>
+                    <CocktailActionButton
+                      className="primary"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => navigate('/menu')}
+                    >
+                      Order Now
+                    </CocktailActionButton>
+                    <CocktailActionButton
+                      className="secondary"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleCloseCocktailModal}
+                    >
+                      Close
+                    </CocktailActionButton>
+                  </CocktailActionButtons>
+                </CocktailModalBody>
+              </CocktailModalContent>
+            </CocktailModalOverlay>
+          )}
+        </AnimatePresence>
       </FeaturedCocktailsSection>
 
       <TestimonialsSection>

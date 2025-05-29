@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -39,8 +39,8 @@ const TabNavigation = styled.div`
   justify-content: center;
   margin-bottom: 3rem;
   border-bottom: 1px solid ${props => props.theme.primary}33;
-  overflow-x: auto;
-  
+  // overflow-x: auto;
+  flex-wrap: wrap;
   @media (max-width: 768px) {
     justify-content: flex-start;
   }
@@ -186,8 +186,230 @@ const SpecialBadge = styled.div`
   z-index: 2;
 `;
 
+// Modal Components
+const ModalOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+`;
+
+const ModalContent = styled(motion.div)`
+  background: ${props => props.theme.surface};
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid ${props => props.theme.primary}33;
+  position: relative;
+`;
+
+const CloseButton = styled(motion.button)`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: ${props => props.theme.background};
+  border: 2px solid ${props => props.theme.primary}33;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: ${props => props.theme.text};
+  font-size: 1.2rem;
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${props => props.theme.primary};
+    color: white;
+    transform: rotate(90deg);
+  }
+`;
+
+const ModalImage = styled(motion.div)`
+  width: 100%;
+  height: 300px;
+  background-image: url(${props => props.imageUrl});
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      ${props => props.theme.surface}cc
+    );
+  }
+`;
+
+const ModalBody = styled.div`
+  padding: 2rem;
+  padding-top: 1rem;
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+`;
+
+const ModalTitle = styled.h2`
+  font-size: 2rem;
+  color: ${props => props.theme.text};
+  margin: 0;
+  flex: 1;
+`;
+
+const ModalPrice = styled.span`
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: ${props => props.theme.primary};
+  margin-left: 1rem;
+`;
+
+const ModalDescription = styled.p`
+  color: ${props => props.theme.textSecondary};
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+`;
+
+const IngredientsSection = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const IngredientsTitle = styled.h3`
+  color: ${props => props.theme.text};
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+`;
+
+const ModalIngredients = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.8rem;
+`;
+
+const ModalIngredient = styled(motion.div)`
+  background: ${props => props.theme.primary}22;
+  color: ${props => props.theme.primary};
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid ${props => props.theme.primary}33;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+
+  &:hover {
+    background: ${props => props.theme.primary}33;
+    transform: translateY(-2px);
+  }
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+`;
+
+const ActionButton = styled(motion.button)`
+  flex: 1;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.primary {
+    background: ${props => props.theme.gradient};
+    color: white;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px ${props => props.theme.primary}44;
+    }
+  }
+
+  &.secondary {
+    background: ${props => props.theme.background};
+    color: ${props => props.theme.text};
+    border: 2px solid ${props => props.theme.primary}33;
+    
+    &:hover {
+      background: ${props => props.theme.primary}11;
+      border-color: ${props => props.theme.primary}66;
+    }
+  }
+`;
+
 const Menu = () => {
   const [activeTab, setActiveTab] = useState('cocktails');
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  // Close modal when pressing Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedItem(null);
+      }
+    };
+
+    if (selectedItem) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedItem]);
+
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedItem(null);
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleCloseModal();
+    }
+  };
 
   const tabs = [
     { id: 'cocktails', label: 'Signature Cocktails' },
@@ -405,7 +627,9 @@ const Menu = () => {
                 key={index}
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
-                style={{ position: 'relative' }}
+                whileTap={{ scale: 0.98 }}
+                style={{ position: 'relative', cursor: 'pointer' }}
+                onClick={() => handleItemClick(item)}
               >
                 {item.special && <SpecialBadge>{item.special}</SpecialBadge>}
                 <ItemImage
@@ -428,6 +652,96 @@ const Menu = () => {
               </MenuItem>
             ))}
           </MenuGrid>
+        </AnimatePresence>
+
+        {/* Modal */}
+        <AnimatePresence>
+          {selectedItem && (
+            <ModalOverlay
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={handleOverlayClick}
+            >
+              <ModalContent
+                initial={{ scale: 0.8, opacity: 0, y: 50 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.8, opacity: 0, y: 50 }}
+                transition={{ 
+                  type: "spring",
+                  damping: 25,
+                  stiffness: 300
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <CloseButton
+                  onClick={handleCloseModal}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  ×
+                </CloseButton>
+                
+                {selectedItem.special && (
+                  <SpecialBadge style={{ top: '1rem', left: '1rem', right: 'auto' }}>
+                    {selectedItem.special}
+                  </SpecialBadge>
+                )}
+                
+                <ModalImage
+                  imageUrl={selectedItem.image}
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                />
+                
+                <ModalBody>
+                  <ModalHeader>
+                    <ModalTitle>{selectedItem.name}</ModalTitle>
+                    <ModalPrice>{selectedItem.price}</ModalPrice>
+                  </ModalHeader>
+                  
+                  <ModalDescription>{selectedItem.description}</ModalDescription>
+                  
+                  <IngredientsSection>
+                    <IngredientsTitle>Ingredients</IngredientsTitle>
+                    <ModalIngredients>
+                      {selectedItem.ingredients.map((ingredient, idx) => (
+                        <ModalIngredient
+                          key={idx}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          {ingredient}
+                        </ModalIngredient>
+                      ))}
+                    </ModalIngredients>
+                  </IngredientsSection>
+                  
+                  <ActionButtons>
+                    <ActionButton
+                      className="primary"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Order Now
+                    </ActionButton>
+                    <ActionButton
+                      className="secondary"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleCloseModal}
+                    >
+                      Close
+                    </ActionButton>
+                  </ActionButtons>
+                </ModalBody>
+              </ModalContent>
+            </ModalOverlay>
+          )}
         </AnimatePresence>
       </MenuContent>
     </MenuContainer>

@@ -11,9 +11,24 @@ const NavbarContainer = styled(motion.nav)`
   right: 0;
   z-index: 1000;
   padding: 1rem 2rem;
+  /*
   background: ${props => props.scrolled 
-    ? `${props.theme.background}ee` 
-    : 'transparent'};
+      ? `${props.theme.background}ee` 
+      : 'transparent'};
+  */
+  background: ${props => {
+    if (props.scrolled) {
+      return `${props.theme.background}ee`; // Background when scrolled (applies to both themes)
+    } else {
+      // Background when not scrolled
+      if (!props.isDarkMode) { // Light theme
+        return 'linear-gradient(to bottom, #FEFEFE, #F0F2F5, #E8ECF0)';// White background for light theme when not scrolled
+      } else { // Dark theme
+        return 'transparent'; // Transparent background for dark theme when not scrolled
+      }
+    }
+  }};
+
   backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
   transition: all 0.3s ease;
   border-bottom: ${props => props.scrolled 
@@ -110,7 +125,7 @@ const ThemeToggleThumb = styled(motion.div)`
   border-radius: 50%;
   position: absolute;
   top: 2px;
-  left: ${props => props.isDark ? '28px' : '2px'};
+  left: ${props => props.isDark ? '26px' : '2px'};
   transition: left 0.3s ease;
 `;
 
@@ -145,7 +160,7 @@ const MenuLine = styled(motion.div)`
 
 const MobileMenu = styled(motion.div)`
   position: fixed;
-  top: 80px;
+  top: 60px;
   left: 0;
   right: 0;
   background: ${props => props.theme.background};
@@ -153,6 +168,7 @@ const MobileMenu = styled(motion.div)`
   backdrop-filter: blur(10px);
   padding: 2rem;
   display: none;
+  z-index: 9999;
 
   @media (max-width: 768px) {
     display: block;
@@ -167,6 +183,7 @@ const MobileNavLink = styled(Link)`
   padding: 1rem 0;
   border-bottom: 1px solid ${props => props.theme.surface};
   transition: color 0.3s ease;
+  text-align: center;
 
   &:hover {
     color: ${props => props.theme.primary};
@@ -214,6 +231,7 @@ const Navbar = () => {
     <>
       <NavbarContainer
         scrolled={scrolled}
+        isDarkMode={isDarkMode} 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
