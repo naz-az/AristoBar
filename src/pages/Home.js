@@ -26,6 +26,10 @@ const HeroSection = styled.section`
   background-position: center 80%;
   background-repeat: no-repeat;
   
+  @media (max-width: 768px) {
+    background-position: 47.5% 80%;
+  }
+  
   &::before {
     content: '';
     position: absolute;
