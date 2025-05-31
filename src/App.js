@@ -23,27 +23,27 @@ export const useTheme = () => useContext(ThemeContext);
 
 // Theme definitions
 const lightTheme = {
-  primary: '#d4af37',
+  primary: '#5D1E0F',
   secondary: '#2c1810',
   background: '#ffffff',
   surface: '#f8f8f8',
   text: '#2c1810',
   textSecondary: '#666666',
-  accent: '#c9a96e',
+  accent: '#8B2F1F',
   shadow: 'rgba(44, 24, 16, 0.1)',
-  gradient: 'linear-gradient(135deg, #d4af37 0%, #c9a96e 100%)',
+  gradient: 'linear-gradient(135deg, #5D1E0F 0%, #8B2F1F 100%)',
 };
 
 const darkTheme = {
-  primary: '#d4af37',
+  primary: '#5D1E0F',
   secondary: '#f8f8f8',
   background: '#1a1a1a',
   surface: '#2a2a2a',
   text: '#ffffff',
   textSecondary: '#cccccc',
-  accent: '#c9a96e',
+  accent: '#8B2F1F',
   shadow: 'rgba(0, 0, 0, 0.3)',
-  gradient: 'linear-gradient(135deg, #d4af37 0%, #c9a96e 100%)',
+  gradient: 'linear-gradient(135deg, #5D1E0F 0%, #8B2F1F 100%)',
 };
 
 // Global Styles

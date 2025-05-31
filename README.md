@@ -13,7 +13,7 @@ A stunning, interactive static website for Aristo, a trendy urban bar. Built wit
 - **Contact**: Contact form, map embed, and social media links
 
 ### Key Features
-- ✨ **Modern Design**: Sophisticated golden color scheme with elegant typography
+- ✨ **Modern Design**: Sophisticated dark brown color scheme with elegant typography
 - 🌙 **Dark Mode Toggle**: Seamless theme switching
 - 📱 **Fully Responsive**: Optimized for all screen sizes
 - 🎭 **Smooth Animations**: Powered by Framer Motion
@@ -91,8 +91,8 @@ aristo-bar/
 ## 🎨 Design System
 
 ### Color Palette
-- **Primary Gold**: `#d4af37`
-- **Accent Gold**: `#c9a96e`
+- **Primary**: `#5D1E0F`
+- **Accent**: `#8B2F1F`
 - **Dark Text**: `#2c1810`
 - **Light Background**: `#ffffff`
 - **Surface**: `#f8f8f8`
@@ -148,7 +148,7 @@ Powered by Framer Motion:
 Update theme objects in `App.js`:
 ```javascript
 const lightTheme = {
-  primary: '#d4af37',
+  primary: '#5D1E0F',
   // ... other colors
 };
 ```
