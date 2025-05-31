@@ -23,7 +23,7 @@ const HeroSection = styled.section`
     rgba(0, 0, 0, 0.4) 100%
   ), url(${heroImage});
   background-size: cover;
-  background-position: center 80%;
+  background-position: 39.0% 80%;
   background-repeat: no-repeat;
   
   @media (max-width: 768px) {
@@ -1358,12 +1358,12 @@ const Home = () => {
           <HeroTitle variants={itemVariants}>
             Aristo KL
           </HeroTitle>
-          <HeroSubtitle variants={itemVariants}>
+          {/* <HeroSubtitle variants={itemVariants}>
             Where Sophistication Meets Urban Energy
           </HeroSubtitle>
           <HeroTagline variants={itemVariants}>
             "Experience the finest cocktails in an atmosphere of refined elegance"
-          </HeroTagline>
+          </HeroTagline> */}
           <CTAButtons variants={itemVariants}>
             <CTAButton to="/menu" primary>
               View Menu
