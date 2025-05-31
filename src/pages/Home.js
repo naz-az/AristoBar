@@ -773,13 +773,13 @@ const FeatureIcon = styled.div`
   width: 80px;
   height: 80px;
   margin: 0 auto 1.5rem;
-  background: ${props => props.theme.gradient};
+  background: ${props => props.iconColor || props.theme.gradient};
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 10px 25px ${props => props.theme.primary}33;
+  box-shadow: 0 10px 25px ${props => props.iconColor ? `${props.iconColor}33` : `${props.theme.primary}33`};
   
   svg {
     width: 32px;
@@ -1235,7 +1235,8 @@ const Home = () => {
         </svg>
       ),
       title: 'Craft Cocktails',
-      description: 'Expertly crafted cocktails using premium spirits and fresh ingredients sourced from around the world.'
+      description: 'Expertly crafted cocktails using premium spirits and fresh ingredients sourced from around the world.',
+      color: 'linear-gradient(135deg, #4C63D2 0%, #5A3F8C 100%)'
     },
     {
       icon: (
@@ -1248,7 +1249,8 @@ const Home = () => {
         </svg>
       ),
       title: 'Live Music',
-      description: 'Enjoy intimate live performances from talented local and international artists every weekend.'
+      description: 'Enjoy intimate live performances from talented local and international artists every weekend.',
+      color: 'linear-gradient(135deg, #D6336C 0%, #C4384D 100%)'
     },
     {
       icon: (
@@ -1265,7 +1267,8 @@ const Home = () => {
         </svg>
       ),
       title: 'Urban Atmosphere',
-      description: 'Modern, sophisticated ambiance in the heart of Kuala Lumpur\'s vibrant Bukit Bintang district.'
+      description: 'Modern, sophisticated ambiance in the heart of Kuala Lumpur\'s vibrant Bukit Bintang district.',
+      color: 'linear-gradient(135deg, #2E86AB 0%, #A23B72 100%)'
     },
     {
       icon: (
@@ -1277,7 +1280,8 @@ const Home = () => {
         </svg>
       ),
       title: 'Expert Mixologists',
-      description: 'Our award-winning mixologists create unique experiences with every handcrafted cocktail.'
+      description: 'Our award-winning mixologists create unique experiences with every handcrafted cocktail.',
+      color: 'linear-gradient(135deg, #E8175D 0%, #CC527A 100%)'
     },
     {
       icon: (
@@ -1288,7 +1292,8 @@ const Home = () => {
         </svg>
       ),
       title: 'Premium Spirits',
-      description: 'Extensive collection of rare and premium spirits from renowned distilleries worldwide.'
+      description: 'Extensive collection of rare and premium spirits from renowned distilleries worldwide.',
+      color: 'linear-gradient(135deg, #16537e 0%, #267871 100%)'
     },
     {
       icon: (
@@ -1299,7 +1304,8 @@ const Home = () => {
         </svg>
       ),
       title: 'Private Events',
-      description: 'Exclusive venue hire for corporate events, celebrations, and intimate gatherings.'
+      description: 'Exclusive venue hire for corporate events, celebrations, and intimate gatherings.',
+      color: 'linear-gradient(135deg, #B7472A 0%, #D2691E 100%)'
     }
   ];
 
@@ -1694,7 +1700,7 @@ const Home = () => {
                 }}
                 whileHover={{ scale: 1.05 }}
               >
-                <FeatureIcon>{feature.icon}</FeatureIcon>
+                <FeatureIcon iconColor={feature.color}>{feature.icon}</FeatureIcon>
                 <FeatureTitle>{feature.title}</FeatureTitle>
                 <FeatureDescription>{feature.description}</FeatureDescription>
               </FeatureCard>
