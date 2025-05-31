@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { motion, useInView, useAnimation, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import heroImage from '../assets/0.jpg';
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -20,7 +21,7 @@ const HeroSection = styled.section`
     135deg,
     rgba(0, 0, 0, 0.7) 0%,
     rgba(0, 0, 0, 0.4) 100%
-  ), url('https://images.unsplash.com/photo-1582837611539-e3020079eab6?q=80&w=1957&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  ), url(${heroImage});
   background-size: cover;
   background-position: center 80%;
   background-repeat: no-repeat;
@@ -1345,7 +1346,7 @@ const Home = () => {
           variants={containerVariants}
         >
           <HeroTitle variants={itemVariants}>
-            Aristo
+            Aristo KL
           </HeroTitle>
           <HeroSubtitle variants={itemVariants}>
             Where Sophistication Meets Urban Energy

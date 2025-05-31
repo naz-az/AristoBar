@@ -237,7 +237,7 @@ const Navbar = () => {
         transition={{ duration: 0.5 }}
       >
         <NavContent>
-          <Logo to="/">Aristo</Logo>
+          <Logo to="/">Aristo KL</Logo>
           
           <NavLinks>
             {navItems.map((item) => (
