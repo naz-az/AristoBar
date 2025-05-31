@@ -749,7 +749,7 @@ const FeatureCard = styled(motion.div)`
     left: 0;
     right: 0;
     bottom: 0;
-    background: ${props => props.theme.gradient};
+    background: ${props => props.hoverColor || props.theme.gradient};
     opacity: 0;
     transition: opacity 0.3s ease;
   }
@@ -760,7 +760,7 @@ const FeatureCard = styled(motion.div)`
   }
 
   &:hover::before {
-    opacity: 0.05;
+    opacity: 0.08;
   }
 
   * {
@@ -1699,6 +1699,7 @@ const Home = () => {
                   }
                 }}
                 whileHover={{ scale: 1.05 }}
+                hoverColor={feature.color}
               >
                 <FeatureIcon iconColor={feature.color}>{feature.icon}</FeatureIcon>
                 <FeatureTitle>{feature.title}</FeatureTitle>
