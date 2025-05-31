@@ -53,7 +53,7 @@ const HeroContent = styled(motion.div)`
 const HeroTitle = styled(motion.h1)`
   font-size: clamp(3rem, 8vw, 6rem);
   font-family: 'Playfair Display', serif;
-  color: ${props => props.theme.primary};
+  color: rgb(75, 13, 7);
   margin-bottom: 1rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 `;
