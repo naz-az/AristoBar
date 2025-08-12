@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
 // Components
 import Navbar from './components/Navbar';
@@ -9,6 +9,8 @@ import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import ScrollToTop from './components/ScrollToTop';
+import WorkInProgress from './components/WorkInProgress';
+import LimitedHome from './components/LimitedHome';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import About from './pages/About';
@@ -137,6 +139,7 @@ const MainContent = styled.main`
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isWorkInProgress] = useState(true);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -154,22 +157,34 @@ function App() {
         <Router>
           <ScrollToTop />
           <AppContainer>
-            <Navbar />
-            <MainContent>
-              <AnimatePresence mode="wait">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/menu" element={<Menu />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/events" element={<Events />} />
-                  <Route path="/gallery" element={<Gallery />} />
-                  <Route path="/contact" element={<Contact />} />
-                </Routes>
-              </AnimatePresence>
-            </MainContent>
-            <Newsletter />
-            <Footer />
-            <FloatingWhatsApp />
+            {isWorkInProgress ? (
+              <>
+                <Navbar />
+                <MainContent>
+                  <LimitedHome />
+                </MainContent>
+                <WorkInProgress />
+              </>
+            ) : (
+              <>
+                <Navbar />
+                <MainContent>
+                  <AnimatePresence mode="wait">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/menu" element={<Menu />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/events" element={<Events />} />
+                      <Route path="/gallery" element={<Gallery />} />
+                      <Route path="/contact" element={<Contact />} />
+                    </Routes>
+                  </AnimatePresence>
+                </MainContent>
+                <Newsletter />
+                <Footer />
+                <FloatingWhatsApp />
+              </>
+            )}
           </AppContainer>
         </Router>
       </ThemeProvider>

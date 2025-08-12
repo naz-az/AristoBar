@@ -58,23 +58,7 @@ const HeroTitle = styled(motion.h1)`
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 `;
 
-const HeroSubtitle = styled(motion.p)`
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
-  color: #ffffff;
-  margin-bottom: 2rem;
-  font-weight: 300;
-  line-height: 1.6;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-`;
 
-const HeroTagline = styled(motion.p)`
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  color: #f0f0f0;
-  margin-bottom: 3rem;
-  font-style: italic;
-  opacity: 0.9;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-`;
 
 const CTAButtons = styled(motion.div)`
   display: flex;
